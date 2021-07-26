@@ -12,14 +12,15 @@ from users.serializers import UserSerializer
 class UserView(APIView):
 
     def get(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
         if request.GET:
             try:
-                user = User.objects.get_(Q(username=request.GET.get('login')) | Q(pk=request.GET.get('id')))
+                user = User.objects.get(Q(username=request.GET.get('login')) | Q(pk=request.GET.get('id')))
                 serializer = UserSerializer(user)
+                return Response({'user': serializer.data})
             except ObjectDoesNotExist:
                 return Response('User not found')
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
         return Response({'users': serializer.data})
 
     def post(self, request):

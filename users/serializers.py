@@ -10,7 +10,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_password(self, password):
         password_validation.validate_password(password, self.instance)
-        print(password)
         return password
 
     def create(self, validated_data):
